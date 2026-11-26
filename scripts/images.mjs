@@ -34,8 +34,9 @@ await copyFile(
   'public/fonts/cormorant-latin.woff2',
 );
 await mkdir('public/icons', { recursive: true });
+const faviconSource = 'assets/originals/yen-africa-logo.jpg';
 for (const size of [32, 180, 192, 512]) {
-  await sharp('public/brand/golf-spaces-kenya.png')
+  await sharp(faviconSource)
     .resize(size, size, { fit: 'contain', background: '#f5f2eb' })
     .flatten({ background: '#f5f2eb' })
     .png()
