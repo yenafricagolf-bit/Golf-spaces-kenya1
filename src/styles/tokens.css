@@ -1,0 +1,56 @@
+:root {
+  --ink: #222223;
+  --charcoal: #313132;
+  --burgundy: #9a2326;
+  --burgundy-dark: #7d1b1e;
+  --rose: #e6a8a8;
+  --sage: #8da77f;
+  --paper: #f5f2eb;
+  --muted: #5d5d55;
+  --muted-on-dark: #c5c8bf;
+  --line: #d9d9ce;
+  --line-dark: #55574e;
+  --line-dark-strong: #77796e;
+  --line-strong: #bbbdb0;
+  --surface: #fffdf8;
+  --surface-soft: #e9e8e0;
+  --surface-soft-strong: #d8dece;
+  --sage-soft: #e7eadd;
+  --sage-border: #d0d4c5;
+  --danger: #8a1c20;
+  --danger-bg: #fae8e6;
+  --danger-text: #722023;
+  --success: #46623a;
+  --shadow-soft: #2222230a;
+  --page: var(--paper);
+  --text: var(--ink);
+  --serif: 'Cormorant Garamond Variable', Georgia, serif;
+  --sans: Arial, Helvetica, sans-serif;
+  --step-display: clamp(3.5rem, 7.5vw, 6.25rem);
+  --step-heading: clamp(2.5rem, 5vw, 4rem);
+  --step-card: 2rem;
+  --step-body: 1rem;
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s6: 24px;
+  --s8: 32px;
+  --s12: 48px;
+  --s16: 64px;
+  --s20: 80px;
+  --s28: 112px;
+  --radius: 8px;
+  --radius-sm: 4px;
+  --radius-pill: 999px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #222223;
+    --surface: #313132;
+    --text: #f5f2eb;
+    --muted: #c5c8bf;
+    --line: #55574e;
+  }
+}
