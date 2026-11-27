@@ -203,9 +203,7 @@ export async function loadCatalog(): Promise<Catalog> {
   }
 }
 export function imageUrl(path: string, remote = false) {
-  // Keep catalogue data in Supabase, but serve committed image assets from
-  // Netlify's edge cache. This avoids a second storage request and keeps every
-  // optimized derivative available, including hitting-nets.
-  if (!remote || !path.includes('/')) return `/photos/${path}`;
-  return `${config.supabaseUrl}/storage/v1/object/public/product-images/${path.split('/').map(encodeURIComponent).join('/')}`;
+  return remote
+    ? `${config.supabaseUrl}/storage/v1/object/public/product-images/${path.split('/').map(encodeURIComponent).join('/')}`
+    : `/photos/${path}`;
 }
