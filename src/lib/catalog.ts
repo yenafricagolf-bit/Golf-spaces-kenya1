@@ -203,6 +203,9 @@ export async function loadCatalog(): Promise<Catalog> {
   }
 }
 export function imageUrl(path: string, remote = false) {
+  // Image derivatives are generated during the Netlify build and served from
+  // the site's edge cache. Keep Supabase for catalogue data, not image delivery.
+  if (!path.includes('/')) return `/photos/${path}`;
   return remote
     ? `${config.supabaseUrl}/storage/v1/object/public/product-images/${path.split('/').map(encodeURIComponent).join('/')}`
     : `/photos/${path}`;
