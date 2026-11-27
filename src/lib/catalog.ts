@@ -190,7 +190,7 @@ export async function loadCatalog(): Promise<Catalog> {
         .order('sort_order'),
     ]);
     const timeout = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error('Catalogue request timed out')), 2500),
+      setTimeout(() => reject(new Error('Catalogue request timed out')), 1200),
     );
     const [spaces, tiers] = await Promise.race([catalogueRequest, timeout]);
     if (spaces.error || tiers.error) return localCatalog;
