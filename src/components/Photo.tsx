@@ -22,6 +22,9 @@ export function Photo({
   sizes = '(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw',
 }: Props) {
   const base = path.replace(/\.[^.]+$/, '');
+  // Use the smallest optimized derivative as the fallback source. Some catalogue
+  // images intentionally have no unoptimized original (for example hitting-nets).
+  const fallbackPath = `${base}-${widths[0]}.jpg`;
   return (
     <picture className={className}>
       <source
@@ -30,7 +33,7 @@ export function Photo({
         sizes={sizes}
       />
       <img
-        src={imageUrl(path, remote)}
+        src={imageUrl(fallbackPath, remote)}
         srcSet={widths.map((w) => `${imageUrl(`${base}-${w}.jpg`, remote)} ${w}w`).join(', ')}
         sizes={sizes}
         alt={alt}
