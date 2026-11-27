@@ -12,7 +12,10 @@ export default async (request: Request, context: Context) => {
       'Quote server configuration invalid.',
       error instanceof z.ZodError
         ? { variables: error.issues.map((issue) => String(issue.path[0] ?? 'unknown')) }
-        : { type: error instanceof Error ? error.name : 'unknown' },
+        : {
+            type: error instanceof Error ? error.name : 'unknown',
+            message: error instanceof Error ? error.message : 'Unknown configuration error',
+          },
     );
     return Response.json(
       { message: 'Quote requests are temporarily unavailable. Please try again shortly.' },
