@@ -22,9 +22,11 @@ export function Photo({
   sizes = '(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw',
 }: Props) {
   const base = path.replace(/\.[^.]+$/, '');
-  // Use the smallest optimized derivative as the fallback source. Some catalogue
-  // images intentionally have no unoptimized original (for example hitting-nets).
-  const fallbackPath = `${base}-${widths[0]}.jpg`;
+  // Hitting bays has no original file in the live Supabase bucket, so use
+  // the optimized derivative committed with the site.
+  const localOnly = path === 'hitting-nets.jpg';
+  const assetRemote = remote && !localOnly;
+  const fallbackPath = localOnly ? `${base}-${widths[0]}.jpg` : path;
   return (
     <picture className={className}>
       <source
