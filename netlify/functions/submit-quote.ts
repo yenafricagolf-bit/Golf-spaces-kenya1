@@ -24,7 +24,13 @@ export default async (request: Request, context: Context) => {
         db.from('spaces').select('id,uses_surface,is_simulator').eq('published', true),
         db.from('launch_tiers').select('id').eq('published', true),
       ]);
-      if (s.error || t.error) throw new Error('Catalogue unavailable.');
+      if (s.error || t.error) {
+        console.error('Quote catalogue query failed.', {
+          spaces: s.error?.code ?? null,
+          tiers: t.error?.code ?? null,
+        });
+        throw new Error('Catalogue unavailable.');
+      }
       return {
         spaces: z
           .array(z.object({ id: z.uuid(), uses_surface: z.boolean(), is_simulator: z.boolean() }))
@@ -48,7 +54,15 @@ export default async (request: Request, context: Context) => {
         p_ip_hash: ipHash,
         p_payload_hash: hash,
       });
-      if (result.error) throw new Error(result.error.message);
+      if (result.error) {
+        console.error('submit_quote RPC failed.', {
+          code: result.error.code ?? null,
+          message: result.error.message ?? null,
+          details: result.error.details ?? null,
+          hint: result.error.hint ?? null,
+        });
+        throw new Error(result.error.message);
+      }
       return z.uuid().parse(result.data);
     },
     notify: async (id) => {
