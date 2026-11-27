@@ -26,8 +26,24 @@ export default async (request: Request, context: Context) => {
       ]);
       if (s.error || t.error) {
         console.error('Quote catalogue query failed.', {
-          spaces: s.error?.code ?? null,
-          tiers: t.error?.code ?? null,
+          spaces: s.error
+            ? {
+                name: s.error.name ?? null,
+                code: s.error.code ?? null,
+                message: s.error.message ?? null,
+                details: s.error.details ?? null,
+                hint: s.error.hint ?? null,
+              }
+            : null,
+          tiers: t.error
+            ? {
+                name: t.error.name ?? null,
+                code: t.error.code ?? null,
+                message: t.error.message ?? null,
+                details: t.error.details ?? null,
+                hint: t.error.hint ?? null,
+              }
+            : null,
         });
         throw new Error('Catalogue unavailable.');
       }
