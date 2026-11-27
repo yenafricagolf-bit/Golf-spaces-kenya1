@@ -174,31 +174,33 @@ export const localCatalog: Catalog = {
 };
 export async function loadCatalog(): Promise<Catalog> {
   if (!config.supabaseUrl || !config.anonKey) {
-    if (import.meta.env.DEV || import.meta.env.VITE_CATALOG_PREVIEW === 'true') return localCatalog;
-    throw new Error('Our space catalogue is temporarily unavailable. Please try again shortly.');
+    return localCatalog;
   }
-  const { createClient } = await import('@supabase/supabase-js');
-  const db = createClient(config.supabaseUrl, config.anonKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-  const [spaces, tiers] = await Promise.all([
-    db.from('spaces').select('*').eq('published', true).order('sort_order'),
-    db
-      .from('launch_tiers')
-      .select('*, launch_tier_units(*)')
-      .eq('published', true)
-      .order('sort_order'),
-  ]);
-  if (spaces.error || tiers.error)
-    throw new Error('We couldn’t load the space catalogue. Please try again.');
-  return {
-    spaces: spaceSchema.array().parse(spaces.data),
-    tiers: tierSchema
-      .array()
-      .parse(tiers.data)
-      .map((t) => ({ ...t, launch_tier_units: t.launch_tier_units.filter((u) => u.published) })),
-    remote: true,
-  };
+  try {
+    const { createClient } = await import('@supabase/supabase-js');
+    const db = createClient(config.supabaseUrl, config.anonKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const [spaces, tiers] = await Promise.all([
+      db.from('spaces').select('*').eq('published', true).order('sort_order'),
+      db
+        .from('launch_tiers')
+        .select('*, launch_tier_units(*)')
+        .eq('published', true)
+        .order('sort_order'),
+    ]);
+    if (spaces.error || tiers.error) return localCatalog;
+    return {
+      spaces: spaceSchema.array().parse(spaces.data),
+      tiers: tierSchema
+        .array()
+        .parse(tiers.data)
+        .map((t) => ({ ...t, launch_tier_units: t.launch_tier_units.filter((u) => u.published) })),
+      remote: true,
+    };
+  } catch {
+    return localCatalog;
+  }
 }
 export function imageUrl(path: string, remote = false) {
   return remote
