@@ -181,7 +181,7 @@ export async function loadCatalog(): Promise<Catalog> {
     const db = createClient(config.supabaseUrl, config.anonKey, {
       auth: { persistSession: false, autoRefreshToken: false },
     });
-    const [spaces, tiers] = await Promise.all([
+    const catalogueRequest = Promise.all([
       db.from('spaces').select('*').eq('published', true).order('sort_order'),
       db
         .from('launch_tiers')
@@ -189,6 +189,10 @@ export async function loadCatalog(): Promise<Catalog> {
         .eq('published', true)
         .order('sort_order'),
     ]);
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Catalogue request timed out')), 2500),
+    );
+    const [spaces, tiers] = await Promise.race([catalogueRequest, timeout]);
     if (spaces.error || tiers.error) return localCatalog;
     return {
       spaces: spaceSchema.array().parse(spaces.data),
