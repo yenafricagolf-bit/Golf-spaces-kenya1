@@ -29,12 +29,12 @@ export function Photo({
     <picture className={className}>
       <source
         type="image/webp"
-        srcSet={widths.map((w) => `${imageUrl(`${base}-${w}.webp`, remote)} ${w}w`).join(', ')}
+        srcSet={widths.map((w) => `${imageUrl(`${base}-${w}.webp`, assetRemote)} ${w}w`).join(', ')}
         sizes={sizes}
       />
       <img
-        src={imageUrl(fallbackPath, remote)}
-        srcSet={widths.map((w) => `${imageUrl(`${base}-${w}.jpg`, remote)} ${w}w`).join(', ')}
+        src={imageUrl(fallbackPath, assetRemote)}
+        srcSet={widths.map((w) => `${imageUrl(`${base}-${w}.jpg`, assetRemote)} ${w}w`).join(', ')}
         sizes={sizes}
         alt={alt}
         width={width}
