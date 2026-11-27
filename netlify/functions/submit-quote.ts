@@ -7,7 +7,13 @@ export default async (request: Request, context: Context) => {
   let server: ReturnType<typeof getServer>;
   try {
     server = getServer();
-  } catch {
+  } catch (error) {
+    console.error(
+      'Quote server configuration invalid.',
+      error instanceof z.ZodError
+        ? { variables: error.issues.map((issue) => String(issue.path[0] ?? 'unknown')) }
+        : { type: error instanceof Error ? error.name : 'unknown' },
+    );
     return Response.json(
       { message: 'Quote requests are temporarily unavailable. Please try again shortly.' },
       { status: 503, headers: { 'Cache-Control': 'no-store' } },
